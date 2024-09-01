@@ -1,44 +1,80 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
+
+    // Метод для суммирования элементов массива
+    public static int sumArrayElements(String[][] array) throws MyArraySizeException, MyArrayDataException {
+        // Проверка размера массива
+        if (array.length != 4) {
+            throw new MyArraySizeException("Некорректный размер массива: должно быть 4x4.");
+        }
+
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].length != 4) {
+                throw new MyArraySizeException("Некорректный размер массива: должно быть 4x4.");
+            }
+        }
+
+        int sum = 0;
+
+        // Преобразование элементов и суммирование
+        for (int i = 0; i < array.length; i++) {
+            for (int j = 0; j < array[i].length; j++) {
+                try {
+                    sum += Integer.parseInt(array[i][j]);
+                } catch (NumberFormatException e) {
+                    throw new MyArrayDataException("Некорректные данные в ячейке [" + i + "][" + j + "]: " + array[i][j]);
+                }
+            }
+        }
+
+        return sum;
+    }
+
     public static void main(String[] args) {
-        Dog dog1 = new Dog();
-        Cat cat1 = new Cat();
-        Cat cat2 = new Cat();
+        // Пример правильного массива
+        String[][] correctArray = {
+                {"1", "2", "3", "4"},
+                {"5", "6", "7", "8"},
+                {"9", "10", "11", "12"},
+                {"13", "14", "15", "16"}
+        };
 
-        Plate plate = new Plate(20);
+        // Пример массива неверного размера
+        String[][] incorrectSizeArray = {
+                {"1", "2", "3", "4"},
+                {"5", "6", "7", "8"},
+                {"9", "10", "11"}
+        };
 
-        Cat[] cats = {cat1, cat2};
+        // Пример массива с неверными данными
+        String[][] incorrectDataArray = {
+                {"1", "2", "3", "4"},
+                {"5", "six", "7", "8"},
+                {"9", "10", "11", "12"},
+                {"13", "14", "15", "16"}
+        };
 
-        for (Cat cat : cats) {
-            cat.eat(plate);
+        // Тест с правильным массивом
+        try {
+            int result = sumArrayElements(correctArray);
+            System.out.println("Сумма элементов массива: " + result);
+        } catch (MyArraySizeException | MyArrayDataException e) {
+            System.err.println("Ошибка: " + e.getMessage());
         }
 
-        for (Cat cat : cats) {
-            System.out.println(cat.getClass().getSimpleName() + " satiety: " + cat.isSatiety());
+        // Тест с массивом неверного размера
+        try {
+            int result = sumArrayElements(incorrectSizeArray);
+            System.out.println("Сумма элементов массива: " + result);
+        } catch (MyArraySizeException | MyArrayDataException e) {
+            System.err.println("Ошибка: " + e.getMessage());
         }
 
-        plate.addFood(10);
-
-        for (Cat cat : cats) {
-            cat.eat(plate);
+        // Тест с массивом, содержащим неверные данные
+        try {
+            int result = sumArrayElements(incorrectDataArray);
+            System.out.println("Сумма элементов массива: " + result);
+        } catch (MyArraySizeException | MyArrayDataException e) {
+            System.err.println("Ошибка: " + e.getMessage());
         }
-
-        for (Cat cat : cats) {
-            System.out.println(cat.getClass().getSimpleName() + " satiety: " + cat.isSatiety());
-        }
-
-        System.out.println("Total animals: " + Animal.animalCount);
-        System.out.println("Total dogs: " + Dog.dogCount);
-        System.out.println("Total cats: " + Cat.catCount);
-
-        //Вывод второго задания
-        Shape circle = new Circle(5, "Red", "Black");
-        Shape rectangle = new Rectangle(4, 7, "Blue", "Green");
-        Shape triangle = new Triangle(3, 4, 5, "Yellow", "Orange");
-
-        circle.printDetails();
-        rectangle.printDetails();
-        triangle.printDetails();
     }
 }
